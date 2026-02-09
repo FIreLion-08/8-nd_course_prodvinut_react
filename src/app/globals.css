@@ -1,13 +1,16 @@
+/* обнуляем отступы */
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
 }
 
+/* подключаем шрифт */
 body {
   font-family: var(--font-montserrat), "Arial";
 }
 
+/* обнуляем отступы у заголовков и т.д. */
 h1,
 h2,
 h3,
@@ -18,12 +21,20 @@ p {
   margin: 0;
 }
 
+/* подключаем шрифт к ссылкам, инпутам и кнопкам*/
 a,
 input,
 button {
   font-family: var(--font-montserrat), "Arial";
 }
 
+/* убираем подчеркивание у ссылок */
 a {
   text-decoration: none;
+}
+
+ul,
+li {
+  list-style-type: none;
+  padding-left: 0;
 }
