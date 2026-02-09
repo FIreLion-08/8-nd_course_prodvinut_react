@@ -13,7 +13,7 @@ export default function AuthForm({ isSignUp }) {
               <Link href="/">
                 <div className={styles.modal__logo}>
                   <Image
-                    src="/img/logo_modal.png"
+                    src="./img/logo_modal.png"
                     alt="logo"
                     width={140}
                     height={21}
