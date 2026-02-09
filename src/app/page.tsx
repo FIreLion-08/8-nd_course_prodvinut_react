@@ -4,7 +4,7 @@ import classnames from 'classnames';
 
 import './page.css';
 import styles from './page.module.css';
-import Bar from '@/app/components/Bar/Bar';
+import Bar from '@/components/bar/Bar';
 
 
 export default function Home() {
