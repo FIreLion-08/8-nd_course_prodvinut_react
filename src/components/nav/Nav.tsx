@@ -1,4 +1,4 @@
-'use client';
+'use client'; //Клиентский код
 
 import Image from 'next/image';
 import styles from './nav.module.css';

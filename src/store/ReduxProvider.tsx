@@ -1,4 +1,5 @@
-'use client';
+// src/store/ReduxProvider.tsx
+'use client'; //Клиентский код
 
 import { useRef } from 'react';
 import { AppStore, makeStore } from './store';
