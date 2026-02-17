@@ -1,4 +1,4 @@
-'use client';
+'use client'; //Клиентский код
 
 import styles from './track.module.css';
 import Link from 'next/link';

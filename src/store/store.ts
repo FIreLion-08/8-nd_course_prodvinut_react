@@ -1,3 +1,5 @@
+// src/store/store.ts
+
 import { combineReducers, configureStore } from '@reduxjs/toolkit';
 import { trackSliceReducer } from './features/trackSlice';
 import { TypedUseSelectorHook, useDispatch } from 'react-redux';

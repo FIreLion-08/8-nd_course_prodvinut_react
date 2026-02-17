@@ -1,4 +1,4 @@
-'use client';
+'use client'; //Клиентский код
 
 import { useState } from 'react';
 import styles from './filtertrack.module.css';

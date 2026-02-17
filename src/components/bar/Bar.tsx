@@ -1,4 +1,4 @@
-'use client';
+'use client'; //Клиентский код
 
 import Link from 'next/link';
 import styles from './bar.module.css';
