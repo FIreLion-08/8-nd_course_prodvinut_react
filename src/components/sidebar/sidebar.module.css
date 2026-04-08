@@ -2,6 +2,7 @@
   max-width: 418px;
   padding: 20px 90px 20px 78px;
 }
+
 .sidebar__personal {
   display: -webkit-box;
   display: -ms-flexbox;
@@ -29,9 +30,10 @@
 }
 
 .sidebar__icon {
-  width: 43px;
-  height: 43px;
-  background-color: #313131;
+  width: 40px;
+  height: 40px;
+  /* background-color: #313131; */
+  background-color: #181818;
   border-radius: 50%;
   cursor: pointer;
 }
@@ -78,7 +80,7 @@
   height: 100%;
 }
 
-.sidebar__img {
+/* .sidebar__img {
   width: 100%;
-  /* height: auto; */
-}
+  height: auto;
+} */

@@ -1,28 +1,19 @@
-import { useEffect } from 'react';
-import { useAppDispatch } from '../store/store';
-import {
-  setAccessToken,
-  setCurrentUser,
-  setRefreshToken,
-} from '../store/features/userSlice';
-import { UserType } from '@shared-types/SharedTypes';
+'use client';
+
+import { setAccessToken, setRefreshToken, setUsername } from "@/store/features/authSlice";
+import { useAppDispatch } from "@/store/store";
+import { useEffect } from "react";
 
 export const useInitAuth = () => {
   const dispatch = useAppDispatch();
 
   useEffect(() => {
-    const access = localStorage.getItem('access') || '';
-    const refresh = localStorage.getItem('refresh') || '';
-    const dataUserFromLS = localStorage.getItem('user');
+    const username = localStorage.getItem('username') || '';
+    const accessToken = localStorage.getItem('accessToken') || '';
+    const refreshToken = localStorage.getItem('refreshToken') || '';
 
-    let currentUser: UserType = { email: '', username: '', _id: 0 };
-
-    if (dataUserFromLS) {
-      currentUser = JSON.parse(dataUserFromLS);
-      dispatch(setCurrentUser(currentUser));
-    }
-
-    dispatch(setAccessToken(access));
-    dispatch(setRefreshToken(refresh));
+    dispatch(setUsername(username));
+    dispatch(setAccessToken(accessToken));
+    dispatch(setRefreshToken(refreshToken));
   }, [dispatch]);
-};
+}

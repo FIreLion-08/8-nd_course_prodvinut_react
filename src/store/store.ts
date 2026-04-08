@@ -1,35 +1,31 @@
-// src/store/store.ts
-
 import { combineReducers, configureStore } from '@reduxjs/toolkit';
-import { trackSliceReducer } from './features/trackSlice';
-import { TypedUseSelectorHook, useDispatch } from 'react-redux';
-import { useSelector } from 'react-redux';
-import { useStore } from 'react-redux';
-import { userSliceReduser } from './features/userSlice';
-import { loadingSliceReducer } from './features/loadingSlice';
+import { TypedUseSelectorHook, useDispatch, useSelector, useStore } from 'react-redux';
+import { trackSliceReducer } from '@/store/features/trackSlice';
+import { authSliceReducer } from './features/authSlice';
 
-// создаем хранилище makeStore с использованием метода configureStore
 export const makeStore = () => {
   return configureStore({
     reducer: combineReducers({
       tracks: trackSliceReducer,
-      users: userSliceReduser,
-      loading: loadingSliceReducer,
+      auth: authSliceReducer,
     }),
   });
 };
 
-// определяем тип makeStore
+// Infer the type of makeStore
 export type AppStore = ReturnType<typeof makeStore>;
-// выведим типы \`RootState\` и \`AppDispatch\` из самого хранилища
+
+// Infer the \`RootState\` and \`AppDispatch\` types from the store itself
 type RootState = ReturnType<AppStore['getState']>;
 export type AppDispatch = AppStore['dispatch'];
 
-// используем во всем приложении вместо простоых \`useDispatch\` и \`useSelector\`
-// export const useAppDispatch = useDispatch.withTypes<AppDispatch>(); // чтобы вызывать редьюсеры
-// export const useAppSelector = useSelector.withTypes<RootState>(); // чтобы получать состояние в любом компоненте
-// export const useAppSrore = useStore.withTypes<AppStore>(); //
+// // Для нового TS
+// // Use throughout your app instead of plain \`useDispatch\` and \`useSelector\`
+// export const useAppDispatch = useDispatch.withTypes<AppDispatch>();
+// export const useAppSelector = useSelector.withTypes<RootState>();
+// export const useAppStore = useStore.withTypes<AppStore>();
 
-export const useAppDispatch: () => AppDispatch = useDispatch; // чтобы вызывать редьюсеры
-export const useAppSelector: TypedUseSelectorHook<RootState> = useSelector; // чтобы получать состояние в любом компоненте
-export const AppDispatch: () => AppStore = useStore;
+// Для старого TS
+export const useAppDispatch: () => AppDispatch = useDispatch;
+export const useAppSelector: TypedUseSelectorHook<RootState> = useSelector;
+export const useAppStore: () => AppStore = useStore;
