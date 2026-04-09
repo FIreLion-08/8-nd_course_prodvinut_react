@@ -3,7 +3,7 @@ import { render, screen } from '@testing-library/react';
 import ReduxProvider from '@/store/ReduxProvider';
 import Sidebar from './Sidebar';
 import userEvent from '@testing-library/user-event';
-import Centerblock from '../centerblock/Centerblock';
+import Centerblock from '../centerblock/centerblock';
 import { TrackType } from '@/sharedTypes/sharedTypes';
 import { data } from '@/data';
 

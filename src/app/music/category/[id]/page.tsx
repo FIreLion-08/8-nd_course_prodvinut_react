@@ -1,7 +1,7 @@
 'use client';
 
 import { useParams } from 'next/navigation';
-import Centerblock from '@/components/centerblock/Centerblock';
+import Centerblock from '@/components/centerblock/centerblock';
 import { useEffect, useState } from 'react';
 import { getTracks, getCategoryTracks } from '@/app/services/tracks/trackApi';
 import { TrackType } from '@/sharedTypes/sharedTypes';
