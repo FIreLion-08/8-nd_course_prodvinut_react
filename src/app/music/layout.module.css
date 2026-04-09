@@ -2,7 +2,7 @@
   width: 100%;
   min-height: 100%;
   overflow: hidden;
-  background-color: #181818;
+  background-color: #383838;
 }
 
 .container {
@@ -11,6 +11,7 @@
   margin: 0 auto;
   position: relative;
   background-color: #181818;
+  color: #fff;
 }
 
 .main {
@@ -25,15 +26,4 @@
   -webkit-box-pack: justify;
   -ms-flex-pack: justify;
   justify-content: space-between;
-}
-
-.error__message {
-  color: #ffffff;
-  font-style: normal;
-  font-weight: 400;
-  font-size: 42px;
-  line-height: 72px;
-  letter-spacing: -0.8px;
-  margin-bottom: 45px;
-  padding: 20px 40px 20px 111px;
 }
