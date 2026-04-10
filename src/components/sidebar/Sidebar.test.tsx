@@ -3,21 +3,51 @@ import { render, screen } from '@testing-library/react';
 import ReduxProvider from '@/store/ReduxProvider';
 import Sidebar from './Sidebar';
 import userEvent from '@testing-library/user-event';
-import Centerblock from '../centerblock/centerblock';
+import Centerblock from '../Centerblock/Centerblock';
 import { TrackType } from '@/sharedTypes/sharedTypes';
 import { data } from '@/data';
+import * as storeHooks from "@/store/store";
+
 
 const mockTracks: TrackType[] = data;
+
+
+// создать мок для теста
+jest.spyOn(storeHooks, 'useAppSelector').mockImplementation((selectorFn: any) => {
+  // создать фейковое состояние (без скелетона, чтобы сразу отобразилось 'Авторизуйтесь')
+  const mockState = {
+    auth: {
+      username: null,
+      access: null // нет авторизации
+    },
+    tracks: {
+      fetchIsLoading: false, // состояние загрузки false
+      favoriteTracks: [],
+      filters: {
+        authors: [],
+        years: 'По умолчанию',
+        genres: []
+      }
+    },
+    theme: {
+      theme: 'dark'
+    }
+  };
+  return selectorFn(mockState as any);
+});
+
 
 // Мокирование useRouter из next/navigation
 jest.mock('next/navigation', () => ({
   useRouter: jest.fn(),
 }));
 
+
 describe('Sidebar component with next/navigation', () => {
   // создать мок для router.push
   const mockPush = jest.fn();
   const mockUseRouter = require('next/navigation').useRouter;
+
 
   beforeEach(() => {
     // настроить мок перед каждым тестом
@@ -31,35 +61,33 @@ describe('Sidebar component with next/navigation', () => {
     jest.clearAllMocks();
   });
 
-  test('Отображается "Авторизуйтесь"', () => {
+
+  test('Отображается "Авторизуйтесь" если пользователь не авторизовался', () => {
     render(
       <ReduxProvider>
         <Sidebar />
-      </ReduxProvider>,
-    );
+      </ReduxProvider>
+    )
     expect(screen.getAllByText('Авторизуйтесь').length).toBeGreaterThan(0);
   });
 
-  test('Отображается кнопка выхода', () => {
+  test('Не отображается кнопка выхода', () => {
     const { container } = render(
       <ReduxProvider>
         <Sidebar />
-      </ReduxProvider>,
+      </ReduxProvider>
     );
 
-    const logoutButton = container.querySelector('div.sidebar__icon');
     const logoutButtons = container.querySelectorAll('div.sidebar__icon');
 
-    expect(logoutButtons.length).toBe(1);
-    expect(logoutButton).toBeInTheDocument();
-    expect(logoutButton).toBeVisible();
+    expect(logoutButtons.length).toBe(0);
   });
 
   test('Отображается три карточки категорий', () => {
     const { container } = render(
       <ReduxProvider>
         <Sidebar />
-      </ReduxProvider>,
+      </ReduxProvider>
     );
 
     const sidebarItems = container.querySelectorAll('div.sidebar__item');
@@ -78,9 +106,8 @@ describe('Sidebar component with next/navigation', () => {
     render(
       <ReduxProvider>
         <Sidebar />
-      </ReduxProvider>,
+      </ReduxProvider>
     );
-    // console.log(screen.debug());
 
     const sidebarItems = screen.getAllByRole('link');
 
@@ -96,10 +123,9 @@ describe('Sidebar component with next/navigation', () => {
           error=""
           isAuthRequired={false}
         />
-      </ReduxProvider>,
+      </ReduxProvider>
     );
 
-    console.log(screen.debug());
 
     // проверить, что отображается корректное название категории
     expect(screen.getByText('Плэйлист дня')).toBeInTheDocument();

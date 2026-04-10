@@ -1,17 +1,16 @@
 'use client';
 
-import Centerblock from '@/components/centerblock/centerblock';
+
+import Centerblock from '@/components/Centerblock/Centerblock';
 import { TrackType } from '@/sharedTypes/sharedTypes';
-import { resetFilters, setFavoriteTracks } from '@/store/features/trackSlice';
+import { resetFilters, setFavoriteTracks, setFetchIsLoading } from '@/store/features/trackSlice';
 import { useAppDispatch, useAppSelector } from '@/store/store';
 import { useEffect, useState } from 'react';
 
+
 export default function FavoritePage() {
   const dispatch = useAppDispatch();
-  // const { favoriteTracks, fetchIsLoading, fetchError, allTracks, filters, filtredTracks } = useAppSelector((state) => state.tracks);
-  const { fetchIsLoading, fetchError, filters, filtredTracks } = useAppSelector(
-    (state) => state.tracks,
-  );
+  const { fetchIsLoading, fetchError, filters, filtredTracks } = useAppSelector((state) => state.tracks);
 
   const isAuthRequired = true;
 
@@ -24,52 +23,48 @@ export default function FavoritePage() {
   }, []);
 
   useEffect(() => {
-    const savedFavorites = localStorage.getItem('favoriteTracks');
-    // console.log("savedFavorites: ", savedFavorites);
+    dispatch(setFetchIsLoading(true));
 
-    const favoritePlaylist: TrackType[] | [] | null = savedFavorites
-      ? JSON.parse(savedFavorites)
-      : [];
-    // console.log("favoritePlaylist: ", favoritePlaylist);
+    const savedFavorites = localStorage.getItem('favoriteTracks');
+
+    const favoritePlaylist: TrackType[] | [] | null = savedFavorites ? JSON.parse(savedFavorites) : [];
 
     if (favoritePlaylist) {
       setMyTracks(favoritePlaylist);
       dispatch(setFavoriteTracks(favoritePlaylist));
-    }
+    };
+
+    const timer = setTimeout(() => {
+      dispatch(setFetchIsLoading(false));
+    }, 500);
+
+    return () => clearTimeout(timer);
   }, [dispatch]);
 
-  // получить плэйлист текущей страницы в зависимости от иcпользования фильтров, поиска
-  // useEffect(() => {
-  //   const currentPlaylist = filters.authors.length ? filtredTracks : myTracks;
-  //   setPlaylist(currentPlaylist);
-  // }, [myTracks, filtredTracks]);
-
   useEffect(() => {
-    const isFiltersEnabled = Object.entries(filters)
-      .map(([key, value]) => {
-        if (key === 'years') {
-          return value !== 'По умолчанию';
-        }
+    const isFiltersEnabled = Object.entries(filters).map(([key, value]) => {
+      if (key === 'years') {
+        return value !== 'По умолчанию';
+      };
 
-        return !!value.length;
-      })
-      .some(Boolean);
+      return !!value.length;
+    }).some(Boolean);
 
     const currentPlaylist = isFiltersEnabled ? filtredTracks : myTracks;
     setPlaylist(currentPlaylist);
   }, [myTracks, filtredTracks, filters]);
+
 
   return (
     <>
       <Centerblock
         categoryName="Мои треки"
         pagePlaylist={myTracks}
-        // playlist={favoriteTracks}
         playlist={playlist}
         isLoading={fetchIsLoading}
         error={fetchError || ''}
         isAuthRequired={isAuthRequired}
       />
     </>
-  );
+  )
 }

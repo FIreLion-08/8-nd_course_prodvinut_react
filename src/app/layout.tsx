@@ -18,9 +18,21 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const themeCode = `
+    (function() {
+      try {
+        var theme = localStorage.getItem('theme') || 'dark';
+        document.documentElement.classList.add(theme);
+      } catch (e) {}
+    })();
+  `;
+
   return (
     <ReduxProvider>
-      <html lang="en">
+      <html lang="ru" suppressHydrationWarning>
+        <head>
+          <script dangerouslySetInnerHTML={{ __html: themeCode }} />
+        </head>
         <body className={`${montserrat.variable}`}>
           {children}
         </body>
