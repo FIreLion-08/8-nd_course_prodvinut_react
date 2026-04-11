@@ -1,21 +1,18 @@
 'use client';
 
-
-import { useParams } from "next/navigation";
-import Centerblock from '@/components/Centerblock/Centerblock';
+import { useParams } from 'next/navigation';
+import Centerblock from '@/components/centerblock/Centerblock';
 import { useEffect, useState } from 'react';
 import { getCategoryTracks } from '@/app/services/tracks/trackApi';
 import { TrackType } from '@/sharedTypes/sharedTypes';
 import { AxiosError } from 'axios';
-import { useAppDispatch, useAppSelector } from "@/store/store";
-import { resetFilters, setFetchIsLoading } from "@/store/features/trackSlice";
-
+import { useAppDispatch, useAppSelector } from '@/store/store';
+import { resetFilters, setFetchIsLoading } from '@/store/features/trackSlice';
 
 type CategoryType = {
-  items: number[],
-  name: string
-}
-
+  items: number[];
+  name: string;
+};
 
 export default function CategoryPage() {
   const params = useParams<{ id: string }>();
@@ -24,10 +21,12 @@ export default function CategoryPage() {
 
   const isAuthRequired = false;
 
-  const { allTracks, fetchError, filters, filtredTracks } = useAppSelector((state) => state.tracks);
+  const { allTracks, fetchError, filters, filtredTracks } = useAppSelector(
+    (state) => state.tracks,
+  );
 
   const [categoryTracks, setCategoryTracks] = useState<TrackType[]>([]);
-  const [categoryName, setCategoryName] = useState("");
+  const [categoryName, setCategoryName] = useState('');
   const [error, setError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
 
@@ -45,7 +44,9 @@ export default function CategoryPage() {
 
           setCategoryName(res.name);
 
-          const filteredTracks = allTracks.filter((track) => itemsId.includes(track._id));
+          const filteredTracks = allTracks.filter((track) =>
+            itemsId.includes(track._id),
+          );
 
           setCategoryTracks(filteredTracks);
         })
@@ -54,9 +55,9 @@ export default function CategoryPage() {
             if (error.response) {
               setError(error.response.data);
             } else if (error.request) {
-              setError("Отсутствует интеренет");
+              setError('Отсутствует интеренет');
             } else {
-              setError("Неизвестная ошибка");
+              setError('Неизвестная ошибка');
             }
           }
         })
@@ -67,22 +68,23 @@ export default function CategoryPage() {
     }
   }, [params.id, allTracks.length, dispatch]);
 
-    // получить плэйлист текущей страницы
+  // получить плэйлист текущей страницы
   const [playlist, setPlaylist] = useState<TrackType[]>([]);
 
   useEffect(() => {
-    const isFiltersEnabled = Object.entries(filters).map(([key, value]) => {
-      if(key === 'years') { 
-        return value !== 'По умолчанию';
-      };
+    const isFiltersEnabled = Object.entries(filters)
+      .map(([key, value]) => {
+        if (key === 'years') {
+          return value !== 'По умолчанию';
+        }
 
-      return !!value.length;
-    }).some(Boolean);
+        return !!value.length;
+      })
+      .some(Boolean);
 
     const currentPlaylist = isFiltersEnabled ? filtredTracks : categoryTracks;
     setPlaylist(currentPlaylist);
   }, [categoryTracks, filtredTracks, filters]);
-
 
   return (
     <>
@@ -95,5 +97,5 @@ export default function CategoryPage() {
         isAuthRequired={isAuthRequired}
       />
     </>
-  )
+  );
 }
