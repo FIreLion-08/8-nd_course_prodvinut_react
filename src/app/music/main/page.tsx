@@ -1,6 +1,6 @@
 'use client';
 
-import Centerblock from '@/components/centerblock/Centerblock';
+import Centerblock from '@/components/centerblock/сenterblock';
 import { TrackType } from '@/sharedTypes/sharedTypes';
 import { resetFilters, setFavoriteTracks } from '@/store/features/trackSlice';
 import { useAppSelector } from '@/store/store';
