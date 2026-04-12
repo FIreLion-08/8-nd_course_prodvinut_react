@@ -26,7 +26,7 @@ export default function Bar() {
 
   // проверить, включен ли shuffle
   const isShuffle = useAppSelector((state) => state.tracks.isShuffle);
-  const theme = useAppSelector((state) => state.theme.theme)
+  
 
 
   const [volume, setVolume] = useState(0.5);
@@ -103,13 +103,20 @@ export default function Bar() {
   };
 
   const onTimeUpdate = () => {
+    // console.log(`трек "${currentTrackName}" isLoadedTrack: `, isLoadedTrack);
     if (audioRef.current && isLoadedTrack) {
+      // // учесть загрузился трек или нет, начинать проиграывать только после загрузки
+      // isLoadedTrack д.б. = true
       setCurrentTime(audioRef.current.currentTime);
       setDuration(audioRef.current.duration);
+
+      // console.log("currentTime: ", currentTime);
+      // console.log("duration: ", duration);
     }
   };
 
   const onLoadedMetadata = () => {
+    // console.log("Start");
     if (audioRef.current) {
       audioRef.current.play();
       dispatch(setIsPlay(true));
@@ -118,7 +125,10 @@ export default function Bar() {
   };
 
   const onEnded = () => {
+    // console.log("isLoop: ", isLoop);
+    // console.log("Next track");
     dispatch(setIsPlay(false));
+    // setIsLoadedTrack(false);
 
     if (isLoop) {
       if (audioRef.current) {
@@ -130,6 +140,7 @@ export default function Bar() {
   };
 
   const onChangeProgress = (e: ChangeEvent<HTMLInputElement>) => {
+    // console.log("e: ", e);
     // 0. получить новое время из события клика по шкале
     const newTime = Number(e.target.value);
     if (audioRef.current) {
@@ -292,22 +303,7 @@ export default function Bar() {
                 onClick={onMute}
               >
                 <svg className={styles.volume__svg}>
-                  <use xlinkHref={
-                    isMuted ?
-                      (
-                        theme === 'dark' ?
-                          "/img/icon/sprite.svg#icon-mute"
-                          :
-                          "/img/icon/sprite.svg#icon-mute-light"
-                      )
-                      :
-                      (
-                        theme === 'dark' ?
-                          "/img/icon/sprite.svg#icon-volume"
-                          :
-                          "/img/icon/sprite.svg#icon-volume-light"
-                      )
-                  }></use>
+                  <use xlinkHref={isMuted ? "/img/icon/sprite.svg#icon-mute" : "/img/icon/sprite.svg#icon-volume"}></use>
 
                 </svg>
               </div>

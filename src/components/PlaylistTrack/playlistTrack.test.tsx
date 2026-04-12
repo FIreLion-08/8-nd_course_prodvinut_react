@@ -68,7 +68,7 @@ describe('PlaylistTrack component', () => {
       expect(selectedTrackIcon).toBeInTheDocument();
       expect(selectedTrackIcon).toBeVisible();
     } else {
-      throw new Error('После клика по треку не отобразилась иконка, что трек выбран');
+      throw new Error('Названий треков не обнаружено');
     }
   });
 
@@ -81,7 +81,7 @@ describe('PlaylistTrack component', () => {
       </ReduxProvider>
     );
 
-    const likeButton = container.querySelector('svg.track__timeSvgLike > use');
+    const likeButton = container.querySelector('svg.track__timeSvg > use');
 
     if (likeButton) {
       await user.click(likeButton);
@@ -89,7 +89,7 @@ describe('PlaylistTrack component', () => {
       expect(likeButton).toHaveAttribute('xlink:href', '/img/icon/sprite.svg#icon-like');
       expect(likeButton).not.toHaveAttribute('xlink:href', '/img/icon/sprite.svg#icon-like-active');
     } else {
-      throw new Error('Без авторизации установился лайк');
+      throw new Error('Названий треков не обнаружено');
     }
   });
 });

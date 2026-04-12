@@ -1,7 +1,7 @@
 'use client';
 
 
-import { getToken } from '@/app/services/auth/authApi';
+import { authUser, getToken } from '@/app/services/auth/authApi';
 import styles from './signin.module.css';
 import classNames from 'classnames';
 import Link from 'next/link';
@@ -43,6 +43,14 @@ export default function Signin() {
     setIsLoading(true);
 
     try {
+      // авторизоваться
+      const authResp = await authUser({ email, password })
+
+      // получить время получения токена в секундах и записать в LS
+      const tokenGetTime = String(new Date().getTime() / 1000);
+      // console.log("время получения токена в секундах: ", tokenGetTime);
+      localStorage.setItem("tokenGetTime", tokenGetTime);
+
       // получить токены, записать в LS
       const tokenResp = await getToken({ email, password })
 
@@ -51,6 +59,7 @@ export default function Signin() {
 
       setIsLoading(false);
 
+      // открыть главную страницу
       router.push('/music/main');
 
       dispatch(setUsername(email));

@@ -2,7 +2,7 @@
 
 import styles from './filter.module.css';
 import FilterItem from '../FilterItem/FilterItem';
-import { useEffect, useRef, useState, useCallback, useMemo } from 'react';
+import { useState } from 'react';
 import { TrackType } from '@/sharedTypes/sharedTypes';
 import { getUniqueValuesByKey } from '@/utils/helpers';
 import { useAppDispatch } from '@/store/store';
@@ -19,54 +19,33 @@ export default function Filter({ playlist }: FilterProp) {
 
   const [isOpen, setIsOpen] = useState("");
   const [activeFilter, setActiveFilter] = useState<string>('');
-  const filterRef = useRef<HTMLDivElement | null>(null);
-
 
   const onOpenDropdownList = (title: string) => {
     setIsOpen(title === isOpen ? "" : title); // закрыть список, если он уже открыт
     setActiveFilter(title);
+    // console.log("Открыть список: ", title);
   };
 
-  const uniqAuthors = useMemo(() => {
-    return getUniqueValuesByKey(playlist, 'author');
-  }, [playlist]);
-
-  const uniqGenres = useMemo(() => {
-    return getUniqueValuesByKey(playlist, 'genre');
-  }, [playlist]);
-
+  const uniqAuthors = getUniqueValuesByKey(playlist, 'author');
+  const uniqGenres = getUniqueValuesByKey(playlist, 'genre');
+  // console.log("uniqGenres: ", uniqGenres);
   const years = ['По умолчанию', 'Сначала новые', 'Сначала старые'];
 
-  const onSelectAuthor = useCallback((author: string) => {
+  const onSelectAuthor = (author: string) => {
     dispatch(setFilterAuthors(author));
-  }, [dispatch]);
+  }
 
-  const onSelectYear = useCallback((year: string) => {
+  const onSelectYear = (year: string) => {
     dispatch(setFilterYears(year));
-  }, [dispatch]);
+  }
 
-  const onSelectGenre = useCallback((genre: string) => {
+  const onSelectGenre = (genre: string) => {
     dispatch(setFilterGenres(genre));
-  }, [dispatch]);
-
-  useEffect(() => {
-    const handleOutsideClick = (event: MouseEvent) => {
-      if (filterRef.current && !filterRef.current.contains(event.target as Node)) {
-        setIsOpen("");
-      }
-    };
-
-    // добавить обработчик клика вне окна
-    document.addEventListener('mousedown', handleOutsideClick);
-    return () => {
-      // удалить обработчик клика вне окна при размонтировании компонента
-      document.removeEventListener('mousedown', handleOutsideClick);
-    };
-  }, []);
+  }
 
 
   return (
-    <div className={styles.centerblock__filter} ref={filterRef}>
+    <div className={styles.centerblock__filter}>
       <div className={styles.filter__title}>Искать по:</div>
       <FilterItem
         title="исполнителю"

@@ -1,6 +1,6 @@
 import axios from "axios";
 import { BASE_URL } from "../constants";
-import { toast } from 'react-toastify';
+
 
 
 type authUserProps = {
@@ -91,7 +91,7 @@ export const refreshAccessToken = async (userRefreshToken: string): Promise<stri
     )
     return resp.data.access
   } catch (error) {
-    toast.error("Ошибка при обновлении токена");
+    console.error("Ошибка при обновлении токена: ", error);
     throw error;
   }
 }

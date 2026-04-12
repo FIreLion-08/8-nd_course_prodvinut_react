@@ -1,13 +1,13 @@
 'use client';
 
-import { useParams } from 'next/navigation';
-import Centerblock from '@/components/centerblock/сenterblock';
+import { useParams } from "next/navigation";
+import Centerblock from '@/components/centerblock/centerblock';
 import { useEffect, useState } from 'react';
-import { getCategoryTracks } from '@/app/services/tracks/trackApi';
+import { getTracks, getCategoryTracks } from '@/app/services/tracks/trackApi';
 import { TrackType } from '@/sharedTypes/sharedTypes';
 import { AxiosError } from 'axios';
-import { useAppDispatch, useAppSelector } from '@/store/store';
-import { resetFilters, setFetchIsLoading } from '@/store/features/trackSlice';
+import { useAppDispatch, useAppSelector } from "@/store/store";
+import { resetFilters } from "@/store/features/trackSlice";
 
 type CategoryType = {
   items: number[];
@@ -21,10 +21,11 @@ export default function CategoryPage() {
 
   const isAuthRequired = false;
 
-  const { allTracks, fetchError, filters, filtredTracks } = useAppSelector(
+  const { fetchIsLoading, allTracks, fetchError, filters, filtredTracks } = useAppSelector(
     (state) => state.tracks,
   );
 
+  const [tracks, setTracks] = useState<TrackType[]>([]);
   const [categoryTracks, setCategoryTracks] = useState<TrackType[]>([]);
   const [categoryName, setCategoryName] = useState('');
   const [error, setError] = useState('');
@@ -35,9 +36,8 @@ export default function CategoryPage() {
   }, []);
 
   useEffect(() => {
-    dispatch(setFetchIsLoading(true));
     setIsLoading(true);
-    if (allTracks.length > 0) {
+    if (!fetchIsLoading && allTracks.length) {
       getCategoryTracks(params.id)
         .then((res: CategoryType) => {
           const itemsId = res.items;
@@ -55,18 +55,17 @@ export default function CategoryPage() {
             if (error.response) {
               setError(error.response.data);
             } else if (error.request) {
-              setError('Отсутствует интеренет');
+              setError("Отсутствует интеренет");
             } else {
-              setError('Неизвестная ошибка');
+              setError("Неизвестная ошибка");
             }
           }
         })
         .finally(() => {
           setIsLoading(false);
-          dispatch(setFetchIsLoading(false));
         });
     }
-  }, [params.id, allTracks.length, dispatch]);
+  }, [tracks, fetchIsLoading, params.id]);
 
   // получить плэйлист текущей страницы
   const [playlist, setPlaylist] = useState<TrackType[]>([]);
