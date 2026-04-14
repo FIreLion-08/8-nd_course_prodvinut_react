@@ -105,11 +105,10 @@ export default function Bar() {
   const onTimeUpdate = () => {
     // console.log(`трек "${currentTrackName}" isLoadedTrack: `, isLoadedTrack);
     if (audioRef.current && isLoadedTrack) {
-      // // учесть загрузился трек или нет, начинать проиграывать только после загрузки
+      // учесть загрузился трек или нет, начинать проиграывать только после загрузки
       // isLoadedTrack д.б. = true
       setCurrentTime(audioRef.current.currentTime);
       setDuration(audioRef.current.duration);
-
       // console.log("currentTime: ", currentTime);
       // console.log("duration: ", duration);
     }

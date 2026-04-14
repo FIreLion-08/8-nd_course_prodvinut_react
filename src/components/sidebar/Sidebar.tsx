@@ -14,7 +14,7 @@ export default function Sidebar() {
   const router = useRouter();
 
   const username = useAppSelector((state) => state.auth.username);
-  // console.log("username: ", username);
+
 
   const logout = () => {
     dispatch(clearUser());
