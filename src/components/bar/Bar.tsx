@@ -42,7 +42,7 @@ export default function Bar() {
 
   const { toggleLike, isLike } = useLikeTrack(currentTrack);
 
-
+  // Управление громкостью
   useEffect(() => {
     if (audioRef.current) {
       if (isMuted) {
@@ -64,13 +64,18 @@ export default function Bar() {
     setIsLoadedTrack(false);
   }, [currentTrack]);
 
+  // Управление воспроизведением трека
+  useEffect(() => {
+    if (currentTrack && currentTrackIsPlay && audioRef.current && isLoadedTrack) {
+      audioRef.current.play().catch(error => {
+        console.error('Ошибка воспроизведения:', error);
+      });
+    } else if (currentTrack && !currentTrackIsPlay && audioRef.current) {
+      audioRef.current.pause();
+    }
+  }, [currentTrack, currentTrackIsPlay, isLoadedTrack]);
 
   if (!currentTrack) return <></>;
-
-  if (currentTrack && currentTrackIsPlay && audioRef.current) {
-    audioRef.current.play();
-  }
-
 
   const playPauseTrack = () => {
     if (currentTrackIsPlay === false) {
@@ -117,8 +122,6 @@ export default function Bar() {
   const onLoadedMetadata = () => {
     // console.log("Start");
     if (audioRef.current) {
-      audioRef.current.play();
-      dispatch(setIsPlay(true));
       setIsLoadedTrack(true);
     }
   };
