@@ -7,11 +7,6 @@ import { useEffect, useState } from 'react';
 
 
 type PlaylistTracksProp = {
-  // name: string,
-  // author: string,
-  // album: string,
-  // time: string
-  // track: TrackType,
   playlist: TrackType[],
   isLoading: boolean,
   error: string,
@@ -20,8 +15,6 @@ type PlaylistTracksProp = {
 
 
 export default function PlaylistTracks({ playlist, isLoading, error, isAuthRequired }: PlaylistTracksProp) {
-  // console.log("треки в PlaylistTracks: ", playlist);
-  // console.log("data в isLoading: ", isLoading);
   const isAccessToken = useAppSelector((state) => state.auth.access);
 
 
@@ -43,10 +36,6 @@ export default function PlaylistTracks({ playlist, isLoading, error, isAuthRequi
                 playlist.map((track) =>
                   <PlaylistTrack
                     key={track._id}
-                    // name={track.name}
-                    // author={track.author}
-                    // album={track.album}
-                    // time={formatTime(track.duration_in_seconds)}
                     track={track}
                     playlist={playlist}
                   />

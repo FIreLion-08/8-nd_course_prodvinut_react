@@ -1,13 +1,13 @@
 'use client';
 
-import { useParams } from 'next/navigation';
+import { useParams } from "next/navigation";
 import Centerblock from '@/components/centerblock/centerblock';
 import { useEffect, useState } from 'react';
 import { getTracks, getCategoryTracks } from '@/app/services/tracks/trackApi';
 import { TrackType } from '@/sharedTypes/sharedTypes';
 import { AxiosError } from 'axios';
-import { useAppDispatch, useAppSelector } from '@/store/store';
-import { resetFilters } from '@/store/features/trackSlice';
+import { useAppDispatch, useAppSelector } from "@/store/store";
+import { resetFilters } from "@/store/features/trackSlice";
 
 type CategoryType = {
   items: number[];
@@ -16,14 +16,14 @@ type CategoryType = {
 
 export default function CategoryPage() {
   const params = useParams<{ id: string }>();
-  // console.log("id из params: ", params.id);
 
   const dispatch = useAppDispatch();
 
   const isAuthRequired = false;
 
-  const { fetchIsLoading, allTracks, fetchError, filters, filtredTracks } =
-    useAppSelector((state) => state.tracks);
+  const { fetchIsLoading, allTracks, fetchError, filters, filtredTracks } = useAppSelector(
+    (state) => state.tracks,
+  );
 
   const [tracks, setTracks] = useState<TrackType[]>([]);
   const [categoryTracks, setCategoryTracks] = useState<TrackType[]>([]);
@@ -35,64 +35,47 @@ export default function CategoryPage() {
     dispatch(resetFilters());
   }, []);
 
+  // Загрузка треков категории
   useEffect(() => {
-    setIsLoading(true);
-    if (!fetchIsLoading && allTracks.length) {
-      getCategoryTracks(params.id)
-        .then((res: CategoryType) => {
-          // console.log("params.id: ", params.id);
-          // console.log("результат запроса категории: ", res);
-
-          const itemsId = res.items;
-          // console.log("id треков категории: ", itemsId);
-
-          // console.log("Название категории:", res.name);
-          setCategoryName(res.name);
-
-          const filteredTracks = allTracks.filter((track) =>
-            itemsId.includes(track._id),
-          );
-          // console.log("Отфильтрованные треки: ", filteredTracks);
-
-          setCategoryTracks(filteredTracks);
-        })
-        .catch((error) => {
-          if (error instanceof AxiosError) {
-            if (error.response) {
-              // // Запрос был сделан, и сервер ответил кодом состояния, который выходит за пределы 2xx
-              // console.log(error.response.data);
-              // console.log(error.response.status);
-              // console.log(error.response.headers);
-
-              setError(error.response.data);
-            } else if (error.request) {
-              // // Запрос был сделан, но ответ не получен
-              // // `error.request`- это экземпляр XMLHttpRequest в браузере и экземпляр http.ClientRequest в node.js
-              // console.log(error.request);
-
-              setError('Отсутствует интеренет');
-            } else {
-              // // Произошло что-то при настройке запроса, вызвавшее ошибку
-              // console.log('Error', error.message);
-
-              setError('Неизвестная ошибка');
-            }
-          }
-        })
-        .finally(() => {
-          setIsLoading(false);
-        });
+    // Не начинаем загрузку, если еще загружаются треки или нет треков
+    if (fetchIsLoading || !allTracks.length) {
+      return;
     }
-  }, [tracks, fetchIsLoading, params.id]);
 
-  // получить плэйлист текущей страницы
+    setIsLoading(true);
+    setError(''); // Сбрасываем ошибку перед новой загрузкой
+
+    getCategoryTracks(params.id)
+      .then((res: CategoryType) => {
+        const itemsId = res.items;
+        setCategoryName(res.name);
+
+        const filteredTracks = allTracks.filter((track) =>
+          itemsId.includes(track._id),
+        );
+
+        setCategoryTracks(filteredTracks);
+      })
+      .catch((error) => {
+        if (error instanceof AxiosError) {
+          if (error.response) {
+            setError(error.response.data);
+          } else if (error.request) {
+            setError("Отсутствует интернет");
+          } else {
+            setError("Неизвестная ошибка");
+          }
+        } else {
+          setError("Произошла ошибка при загрузке");
+        }
+      })
+      .finally(() => {
+        setIsLoading(false);
+      });
+  }, [fetchIsLoading, allTracks, params.id]); // Убрана зависимость tracks
+
+  // получить плейлист текущей страницы
   const [playlist, setPlaylist] = useState<TrackType[]>([]);
-
-  // получить плэйлист текущей страницы в зависимости от иcпользования фильтров, поиска
-  // useEffect(() => {
-  //   const currentPlaylist = filters.authors.length ? filtredTracks : categoryTracks;
-  //   setPlaylist(currentPlaylist);
-  // }, [categoryTracks, filtredTracks]);
 
   useEffect(() => {
     const isFiltersEnabled = Object.entries(filters)

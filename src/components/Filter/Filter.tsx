@@ -10,11 +10,6 @@ import { setFilterAuthors, setFilterGenres, setFilterYears } from '@/store/featu
 
 
 type FilterProp = {
-  // name: string,
-  // author: string,
-  // album: string,
-  // time: string
-  // track: TrackType,
   playlist: TrackType[]
 }
 

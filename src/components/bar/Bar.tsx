@@ -18,20 +18,18 @@ export default function Bar() {
 
   // получить текущий трек
   const currentTrack = useAppSelector((state) => state.tracks.currentTrack);
-  // console.log("currentTrack в Bar: ", currentTrack);
   const currentTrackName = useAppSelector((state) => state.tracks.currentTrack?.name);
   const currentTrackAuthor = useAppSelector((state) => state.tracks.currentTrack?.author);
 
   // проверить, что текущий трек играет
   const currentTrackIsPlay = useAppSelector((state) => state.tracks.isPlay);
-  // console.log("currentTrackIsPlay в Bar: ", currentTrackIsPlay);
 
   // проверить, включен ли shuffle
   const isShuffle = useAppSelector((state) => state.tracks.isShuffle);
+  
 
 
   const [volume, setVolume] = useState(0.5);
-  // console.log("volume", volume);
   const [isLoop, setIsLoop] = useState(false);
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
@@ -39,13 +37,12 @@ export default function Bar() {
   const [progressBarTime, setProgressBarTime] = useState(0);
   const [isMuted, setIsMuted] = useState(false);
   const [currentVolume, setCurrentVolume] = useState(0.5);
-  // console.log("currentVolume: ", currentVolume);
 
   const audioRef = useRef<HTMLAudioElement | null>(null);
 
   const { toggleLike, isLike } = useLikeTrack(currentTrack);
 
-
+  // Управление громкостью
   useEffect(() => {
     if (audioRef.current) {
       if (isMuted) {
@@ -67,23 +64,26 @@ export default function Bar() {
     setIsLoadedTrack(false);
   }, [currentTrack]);
 
+  // Управление воспроизведением трека
+  useEffect(() => {
+    if (currentTrack && currentTrackIsPlay && audioRef.current && isLoadedTrack) {
+      audioRef.current.play().catch(error => {
+        console.error('Ошибка воспроизведения:', error);
+      });
+    } else if (currentTrack && !currentTrackIsPlay && audioRef.current) {
+      audioRef.current.pause();
+    }
+  }, [currentTrack, currentTrackIsPlay, isLoadedTrack]);
 
   if (!currentTrack) return <></>;
 
-  if (currentTrack && currentTrackIsPlay && audioRef.current) {
-    audioRef.current.play();
-  }
-
-
   const playPauseTrack = () => {
     if (currentTrackIsPlay === false) {
-      // console.log("Нажали кнопку Play");
       if (audioRef.current) {
         audioRef.current.play();
         dispatch(setIsPlay(true));
       }
     } else {
-      // console.log("Нажали кнопку Pause");
       if (audioRef.current) {
         audioRef.current.pause();
         dispatch(setIsPlay(false));
@@ -110,11 +110,10 @@ export default function Bar() {
   const onTimeUpdate = () => {
     // console.log(`трек "${currentTrackName}" isLoadedTrack: `, isLoadedTrack);
     if (audioRef.current && isLoadedTrack) {
-      // // учесть загрузился трек или нет, начинать проиграывать только после загрузки
+      // учесть загрузился трек или нет, начинать проиграывать только после загрузки
       // isLoadedTrack д.б. = true
       setCurrentTime(audioRef.current.currentTime);
       setDuration(audioRef.current.duration);
-
       // console.log("currentTime: ", currentTime);
       // console.log("duration: ", duration);
     }
@@ -123,8 +122,6 @@ export default function Bar() {
   const onLoadedMetadata = () => {
     // console.log("Start");
     if (audioRef.current) {
-      audioRef.current.play();
-      dispatch(setIsPlay(true));
       setIsLoadedTrack(true);
     }
   };

@@ -34,6 +34,7 @@
   -webkit-box-pack: justify;
   -ms-flex-pack: justify;
   justify-content: space-between;
+
 }
 
 .bar__player {
@@ -242,20 +243,6 @@
   color: #ffffff;
 }
 
-/* .trackPlay__likeDis {
-  display: -webkit-box;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-box-orient: horizontal;
-  -webkit-box-direction: normal;
-  -ms-flex-direction: row;
-  flex-direction: row;
-  -webkit-box-align: center;
-  -ms-flex-align: center;
-  align-items: center;
-  margin-left: 26%;
-} */
-
 .trackPlay__like,
 .trackPlay__dislike {
   padding: 5px;
@@ -267,17 +254,6 @@
   fill: transparent;
   stroke: #696969;
 }
-
-/* .trackPlay__dislike {
-  margin-left: 28.5px;
-} */
-
-/* .trackPlay__dislikeSvg {
-  width: 14.34px;
-  height: 13px;
-  fill: transparent;
-  stroke: #696969;
-} */
 
 .volume__content {
   display: -webkit-box;
@@ -353,29 +329,19 @@
 
 .btnIcon:active svg {
   fill: transparent;
-  /* stroke: #ffffff; */
   stroke: #ad61ff;
   cursor: pointer;
 }
-
-/* .btnIcon:active .trackPlay__likeSvg,
-.btnIcon:active .trackPlay__dislikeSvg {
-  fill: #696969;
-  stroke: #ffffff;
-  cursor: pointer;
-} */
 
 .btn-text {
   &:hover {
     border-color: #d9b6ff;
     color: #d9b6ff;
-    /* cursor: pointer; */
   }
 
   &:active {
     border-color: #ad61ff;
     color: #ad61ff;
-    /* cursor: pointer; */
   }
 }
 
@@ -391,7 +357,6 @@
   &:hover {
     fill: #cd9fff;
     stroke: #cd9fff;
-    /* cursor: pointer; */
   }
 }
 
@@ -400,6 +365,7 @@
   justify-content: flex-end;
   padding-right: 20px;
   padding-bottom: 10px;
+
 }
 
 .trackPlay__time {

@@ -3,21 +3,25 @@ import { render, screen } from '@testing-library/react';
 import ReduxProvider from '@/store/ReduxProvider';
 import Sidebar from './Sidebar';
 import userEvent from '@testing-library/user-event';
-import Centerblock from '../centerblock/centerblock';
+import Centerblock from '../Centerblock/Centerblock';
 import { TrackType } from '@/sharedTypes/sharedTypes';
 import { data } from '@/data';
 
+
 const mockTracks: TrackType[] = data;
+
 
 // Мокирование useRouter из next/navigation
 jest.mock('next/navigation', () => ({
   useRouter: jest.fn(),
 }));
 
+
 describe('Sidebar component with next/navigation', () => {
   // создать мок для router.push
   const mockPush = jest.fn();
   const mockUseRouter = require('next/navigation').useRouter;
+
 
   beforeEach(() => {
     // настроить мок перед каждым тестом
@@ -31,12 +35,13 @@ describe('Sidebar component with next/navigation', () => {
     jest.clearAllMocks();
   });
 
+
   test('Отображается "Авторизуйтесь"', () => {
     render(
       <ReduxProvider>
         <Sidebar />
-      </ReduxProvider>,
-    );
+      </ReduxProvider>
+    )
     expect(screen.getAllByText('Авторизуйтесь').length).toBeGreaterThan(0);
   });
 
@@ -44,7 +49,7 @@ describe('Sidebar component with next/navigation', () => {
     const { container } = render(
       <ReduxProvider>
         <Sidebar />
-      </ReduxProvider>,
+      </ReduxProvider>
     );
 
     const logoutButton = container.querySelector('div.sidebar__icon');
@@ -59,7 +64,7 @@ describe('Sidebar component with next/navigation', () => {
     const { container } = render(
       <ReduxProvider>
         <Sidebar />
-      </ReduxProvider>,
+      </ReduxProvider>
     );
 
     const sidebarItems = container.querySelectorAll('div.sidebar__item');
@@ -78,9 +83,8 @@ describe('Sidebar component with next/navigation', () => {
     render(
       <ReduxProvider>
         <Sidebar />
-      </ReduxProvider>,
+      </ReduxProvider>
     );
-    // console.log(screen.debug());
 
     const sidebarItems = screen.getAllByRole('link');
 
@@ -96,7 +100,7 @@ describe('Sidebar component with next/navigation', () => {
           error=""
           isAuthRequired={false}
         />
-      </ReduxProvider>,
+      </ReduxProvider>
     );
 
     console.log(screen.debug());
