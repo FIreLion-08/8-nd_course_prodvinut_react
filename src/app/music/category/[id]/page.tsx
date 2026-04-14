@@ -35,39 +35,46 @@ export default function CategoryPage() {
     dispatch(resetFilters());
   }, []);
 
+  // Загрузка треков категории
   useEffect(() => {
-    setIsLoading(true);
-    if (!fetchIsLoading && allTracks.length) {
-      getCategoryTracks(params.id)
-        .then((res: CategoryType) => {
-          const itemsId = res.items;
-
-          setCategoryName(res.name);
-
-          const filteredTracks = allTracks.filter((track) =>
-            itemsId.includes(track._id),
-          );
-
-          setCategoryTracks(filteredTracks);
-        })
-        .catch((error) => {
-          if (error instanceof AxiosError) {
-            if (error.response) {
-              setError(error.response.data);
-            } else if (error.request) {
-              setError("Отсутствует интеренет");
-            } else {
-              setError("Неизвестная ошибка");
-            }
-          }
-        })
-        .finally(() => {
-          setIsLoading(false);
-        });
+    // Не начинаем загрузку, если еще загружаются треки или нет треков
+    if (fetchIsLoading || !allTracks.length) {
+      return;
     }
-  }, [tracks, fetchIsLoading, params.id]);
 
-  // получить плэйлист текущей страницы
+    setIsLoading(true);
+    setError(''); // Сбрасываем ошибку перед новой загрузкой
+
+    getCategoryTracks(params.id)
+      .then((res: CategoryType) => {
+        const itemsId = res.items;
+        setCategoryName(res.name);
+
+        const filteredTracks = allTracks.filter((track) =>
+          itemsId.includes(track._id),
+        );
+
+        setCategoryTracks(filteredTracks);
+      })
+      .catch((error) => {
+        if (error instanceof AxiosError) {
+          if (error.response) {
+            setError(error.response.data);
+          } else if (error.request) {
+            setError("Отсутствует интернет");
+          } else {
+            setError("Неизвестная ошибка");
+          }
+        } else {
+          setError("Произошла ошибка при загрузке");
+        }
+      })
+      .finally(() => {
+        setIsLoading(false);
+      });
+  }, [fetchIsLoading, allTracks, params.id]); // Убрана зависимость tracks
+
+  // получить плейлист текущей страницы
   const [playlist, setPlaylist] = useState<TrackType[]>([]);
 
   useEffect(() => {
